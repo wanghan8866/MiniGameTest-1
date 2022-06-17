@@ -8,6 +8,8 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class GameListener implements Listener {
@@ -15,6 +17,17 @@ public class GameListener implements Listener {
 
     public GameListener(MiniGame miniGame){
         this.miniGame=miniGame;
+    }
+
+    @EventHandler
+    public void onWorldJoin(WorldLoadEvent e){
+        Arena arena=miniGame.getArenaManager().getArena(e.getWorld());
+//        System.out.println(e.getWorld().getName());
+//        System.out.println(arena);
+        if(arena!=null){
+            System.out.println(arena.getWorld().getName());
+            arena.toggleCanJoin();
+        }
     }
 
     @EventHandler
@@ -36,5 +49,16 @@ public class GameListener implements Listener {
         }
 
 
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e){
+        Arena arena=miniGame.getArenaManager().getArena(e.getPlayer());
+        if(arena!=null){
+            e.setCancelled(true);
+        }
+        else{
+            e.setCancelled(false);
+        }
     }
 }

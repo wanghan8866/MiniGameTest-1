@@ -9,13 +9,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.A;
 
-public class AreaCommand implements CommandExecutor {
+public class ArenaCommand implements CommandExecutor {
 
     private MiniGame miniGame;
 
-    public AreaCommand(MiniGame miniGame){
+    public ArenaCommand(MiniGame miniGame){
         this.miniGame=miniGame;
     }
     @Override
@@ -23,6 +22,7 @@ public class AreaCommand implements CommandExecutor {
 
         if(sender instanceof Player){
             Player player=(Player) sender;
+
 
             if(args.length==1&& args[0].equalsIgnoreCase("list")){
                 player.sendMessage(ChatColor.GREEN+"These are the available arenas:");
@@ -57,8 +57,15 @@ public class AreaCommand implements CommandExecutor {
                         if(arena.getState().equals(GameState.LIVE)){
                             player.sendMessage(ChatColor.RED+"This arena is in live!");
                         }else{
-                            arena.addPlayer(player);
-                            player.sendMessage(ChatColor.GREEN+"You are now playing in Arena "+id+".");
+                            if(arena.getCanJoin()){
+                                arena.addPlayer(player);
+                                player.sendMessage(ChatColor.GREEN+"You are now playing in Arena "+id+".");
+                            }
+                            else{
+                                player.sendMessage(ChatColor.RED+"Map is still loading! You can not join now!");
+                            }
+
+
                         }
                     }
                     else{

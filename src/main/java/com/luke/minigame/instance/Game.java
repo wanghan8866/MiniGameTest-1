@@ -13,6 +13,7 @@ public class Game {
 
     public Game(Arena arena){
         this.arena=arena;
+        points=new HashMap<>();
     }
 
     public void start(){

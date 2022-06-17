@@ -1,7 +1,6 @@
 package com.luke.minigame;
 
-import com.luke.minigame.command.AreaCommand;
-import com.luke.minigame.instance.Arena;
+import com.luke.minigame.command.ArenaCommand;
 import com.luke.minigame.listener.ConnectListener;
 import com.luke.minigame.listener.GameListener;
 import com.luke.minigame.manager.ArenaManager;
@@ -21,7 +20,7 @@ public final class MiniGame extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ConnectListener(this),this);
         Bukkit.getPluginManager().registerEvents(new GameListener(this),this);
 
-        getCommand("arena").setExecutor(new AreaCommand(this));
+        getCommand("arena").setExecutor(new ArenaCommand(this));
 
 
 

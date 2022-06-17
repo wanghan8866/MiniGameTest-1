@@ -3,9 +3,7 @@ package com.luke.minigame.instance;
 import com.luke.minigame.GameState;
 import com.luke.minigame.MiniGame;
 import com.luke.minigame.manager.ConfigManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.units.qual.A;
 
@@ -23,6 +21,7 @@ public class Arena {
     private CountDown countDown;
     private Game game;
     private MiniGame miniGame;
+    private boolean canJoin;
 
 
     public Arena(MiniGame miniGame, int id, Location location){
@@ -34,6 +33,7 @@ public class Arena {
         this.players=new ArrayList<>();
         countDown=new CountDown(miniGame,this);
         this.game=new Game(this);
+        canJoin=true;
     }
 
     public Arena(MiniGame miniGame,int id, String name, double x, double y, double z, double yaw, double pitch){
@@ -56,7 +56,20 @@ public class Arena {
         return game;
     }
 
+    public World getWorld(){
+        return spawn.getWorld();
+    }
 
+    public void toggleCanJoin(){
+        this.canJoin=!this.canJoin;
+    }
+
+    public void setCanJoin(Boolean canJoin){
+        this.canJoin=canJoin;
+    }
+    public boolean getCanJoin(){
+        return canJoin;
+    }
 
     public void addPlayer(Player player){
         players.add(player.getUniqueId());
@@ -86,16 +99,23 @@ public class Arena {
 
     public void start(){
 //        state=GameState.LIVE;
+        sendTitle("","");
         game.start();
     }
 
     public void reset(boolean kickPlayers){
-        if(kickPlayers){
+        if(state==GameState.LIVE){
+            this.canJoin=false;
             Location location=ConfigManager.getLobbySpawn();
             for (UUID uuid: players){
                 Bukkit.getPlayer(uuid).teleport(location);
             }
+
             players.clear();
+            Bukkit.unloadWorld(spawn.getWorld(),false);
+            World world= Bukkit.createWorld(new WorldCreator(spawn.getWorld().getName()));
+            world.setAutoSave(false);
+
         }
 
         sendTitle("","");
