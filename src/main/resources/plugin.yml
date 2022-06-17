@@ -2,3 +2,5 @@ name: MiniGame
 version: '${project.version}'
 main: com.luke.minigame.MiniGame
 api-version: 1.19
+commands:
+  arena:
